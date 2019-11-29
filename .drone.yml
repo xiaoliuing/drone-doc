@@ -14,68 +14,68 @@ steps:
     commands:
       - npm run test
 
-  - name: build
-    image: node:alpine
-    commands:
-      - npm run build
-    when:
-      target:
-        - production
+  # - name: build
+  #   image: node:alpine
+  #   commands:
+  #     - npm run build
+  #   when:
+  #     target:
+  #       - production
 
-  - name: async production
-    image: drillster/drone-rsync
-    environment:
-      RSYNC_KEY:
-        from_secret: rsync_key
-    settings:
-      user: root
-      hosts:
-        - 39.107.37.175
-      source: ./.vuepress/dist/*
-      target: /home/www/doc
-      secrets: [ rsync_key ]
-    when:
-      target:
-        - production
-      events:
-        - promote
+  # - name: async production
+  #   image: drillster/drone-rsync
+  #   environment:
+  #     RSYNC_KEY:
+  #       from_secret: rsync_key
+  #   settings:
+  #     user: root
+  #     hosts:
+  #       - 39.107.37.175
+  #     source: ./.vuepress/dist/*
+  #     target: /home/www/doc
+  #     secrets: [ rsync_key ]
+  #   when:
+  #     target:
+  #       - production
+  #     events:
+  #       - promote
   
-  - name: async test
-    image: drillster/drone-rsync
-    environment:
-      RSYNC_KEY:
-        from_secret: rsync_key
-    settings:
-      user: root
-      hosts:
-        - 39.107.37.175
-      source: ./.vuepress/dist/*
-      target: /home/www/doc
-      secrets: [ rsync_key ]
-    when:
-      target:
-        - test
-      events:
-        - promote
+  # - name: async test
+  #   image: drillster/drone-rsync
+  #   environment:
+  #     RSYNC_KEY:
+  #       from_secret: rsync_key
+  #   settings:
+  #     user: root
+  #     hosts:
+  #       - 39.107.37.175
+  #     source: ./.vuepress/dist/*
+  #     target: /home/www/doc
+  #     secrets: [ rsync_key ]
+  #   when:
+  #     target:
+  #       - test
+  #     events:
+  #       - promote
 
-  - name: notify success
-    image: curlimages/curl
-    commands:
-      - |
-        curl 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=e2e7031e-3691-4f98-a46d-99c4a58e5d69' \-H 'Content-Type: application/json' -d '{"msgtype": "text","text": {"content": "ok"}}'
-    when:
-      target:
-        - production
-      status:
-        - success
+  # - name: notify success
+  #   image: curlimages/curl
+  #   commands:
+  #     - |
+  #       curl 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=e2e7031e-3691-4f98-a46d-99c4a58e5d69' \-H 'Content-Type: application/json' -d '{"msgtype": "text","text": {"content": "ok"}}'
+  #   when:
+  #     target:
+  #       - production
+  #     status:
+  #       - success
   
-  - name: notify fail
-    image: curlimages/curl
-    commands:
-      - |
-        curl 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=e2e7031e-3691-4f98-a46d-99c4a58e5d69' -H 'Content-Type: application/json' -d '{"msgtype": "text","text": {"content": "file"}}'
-    when:
-      target:
-        - production
-      status:
-        - failure
+  # - name: notify fail
+  #   image: curlimages/curl
+  #   commands:
+  #     - |
+  #       curl 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=e2e7031e-3691-4f98-a46d-99c4a58e5d69' -H 'Content-Type: application/json' -d '{"msgtype": "text","text": {"content": "file"}}'
+  #   when:
+  #     target:
+  #       - production
+  #     status:
+  #       - failure
